@@ -1,23 +1,35 @@
 <template>
-  <div class="min-h-screen bg-gray-950 p-6">
+  <div class="min-h-screen bg-[#020617] text-slate-200 flex flex-col items-center justify-center p-4 selection:bg-indigo-500/30">
     
-    <ToastContainer v-slot="{ toasts, remove }">
-      <div 
-        v-for="toast in toasts" 
-        :key="toast.id" 
-        :class="['p-4 rounded-lg shadow-2xl flex justify-between items-center pointer-events-auto transition-all', toast.styleClass]"
-      >
-        <span>{{ toast.message }}</span>
-        <button @click="remove(toast.id)" class="ml-4 font-bold opacity-75 hover:opacity-100">✕</button>
-      </div>
-    </ToastContainer>
+    <div class="fixed inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(17,24,39,1)_0%,rgba(2,6,23,1)_100%)] z-0"></div>
 
-    <Welcome />
-    
+    <div v-if="currentPage === 'home'" class="relative z-10 flex flex-col items-center gap-10 w-full max-w-xl animate-in fade-in duration-1000">
+  
+      
+      <button 
+        @click="currentPage = 'test'"
+        class="group relative px-10 py-3 bg-slate-900 border border-slate-700 hover:border-indigo-500/50 text-white rounded-xl text-sm font-semibold transition-all duration-300 shadow-xl"
+      >
+        <span class="relative z-10">ورود به محیط تست</span>
+        <div class="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity"></div>
+      </button>
+
+      <Welcome />
+    </div>
+
+    <div v-else class="relative z-10 w-full flex justify-center animate-in zoom-in-95 duration-500">
+      <NotificationTest @go-back="currentPage = 'home'" />
+    </div>
+
+    <ToastContainer />
   </div>
 </template>
 
 <script setup>
-import ToastContainer from '~/components/ToastContainer.vue'
+import { ref } from 'vue'
 import Welcome from '~/components/Welcome.vue'
+import NotificationTest from '~/components/NotificationTest.vue'
+import ToastContainer from '~/components/ToastContainer.vue'
+
+const currentPage = ref('home')
 </script>
