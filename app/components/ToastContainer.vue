@@ -1,52 +1,42 @@
-<script setup>
-import { useToastStore } from '~/stores/toast'
-const toastStore = useToastStore()
-</script>
-
 <template>
-  <div>
-    <div class="fixed top-5 right-5 z-50 flex flex-col gap-3 w-80">
-      <div 
-        v-for="toast in toastStore.toasts.filter(t => t.position === 'top-right')" 
-        :key="toast.id"
-        class="p-4 rounded-lg shadow-2xl text-white flex justify-between items-center bg-green-500 animate-bounce-short"
-      >
-        <span>{{ toast.message }}</span>
-        <button @click="toastStore.removeToast(toast.id)" class="ml-2 font-bold opacity-70 hover:opacity-100">✕</button>
-      </div>
-    </div>
-
-    <div class="fixed top-5 left-5 z-50 flex flex-col gap-3 w-80">
-      <div 
-        v-for="toast in toastStore.toasts.filter(t => t.position === 'top-left')" 
-        :key="toast.id"
-        class="p-4 rounded-lg shadow-2xl text-white flex justify-between items-center bg-red-500"
-      >
-        <span>{{ toast.message }}</span>
-        <button @click="toastStore.removeToast(toast.id)" class="ml-2 font-bold opacity-70 hover:opacity-100">✕</button>
-      </div>
-    </div>
-
-    <div class="fixed bottom-5 right-5 z-50 flex flex-col gap-3 w-80">
-      <div 
-        v-for="toast in toastStore.toasts.filter(t => t.position === 'bottom-right')" 
-        :key="toast.id"
-        class="p-4 rounded-lg shadow-2xl text-white flex justify-between items-center bg-yellow-500 text-gray-900 font-medium"
-      >
-        <span>{{ toast.message }}</span>
-        <button @click="toastStore.removeToast(toast.id)" class="ml-2 font-bold opacity-70 hover:opacity-100">✕</button>
-      </div>
-    </div>
-
-    <div class="fixed bottom-5 left-5 z-50 flex flex-col gap-3 w-80">
-      <div 
-        v-for="toast in toastStore.toasts.filter(t => t.position === 'bottom-left')" 
-        :key="toast.id"
-        class="p-4 rounded-lg shadow-2xl text-white flex justify-between items-center bg-blue-500"
-      >
-        <span>{{ toast.message }}</span>
-        <button @click="toastStore.removeToast(toast.id)" class="ml-2 font-bold opacity-70 hover:opacity-100">✕</button>
-      </div>
+  <div class="fixed inset-0 z-50 pointer-events-none">
+    <div 
+      v-for="pos in ['top-right', 'top-left', 'bottom-right', 'bottom-left']" 
+      :key="pos"
+      :class="['fixed flex flex-col gap-3 w-80 p-5', positionClasses[pos]]"
+    >
+      <slot 
+        :toasts="getFormattedToasts(pos)" 
+        :remove="toastStore.removeToast" 
+      />
     </div>
   </div>
 </template>
+
+<script setup>
+import { useToastStore } from '~/stores/toast'
+
+const toastStore = useToastStore()
+const positionClasses = {
+  'top-right': 'top-0 right-0',
+  'top-left': 'top-0 left-0',
+  'bottom-right': 'bottom-0 right-0',
+  'bottom-left': 'bottom-0 left-0'
+}
+
+const themeMap = {
+  success: 'bg-green-500 text-white animate-bounce-short',
+  error: 'bg-red-500 text-white',
+  warning: 'bg-yellow-500 text-gray-900 font-medium',
+  info: 'bg-blue-500 text-white'
+}
+
+const getFormattedToasts = (position) => {
+  return toastStore.toasts
+    .filter(t => t.position === position)
+    .map(t => ({
+      ...t,
+      styleClass: themeMap[t.type] || themeMap.info
+    }))
+}
+</script>
