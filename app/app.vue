@@ -10,7 +10,7 @@
         @click="currentPage = 'test'"
         class="group relative px-10 py-3 bg-slate-900 border border-slate-700 hover:border-indigo-500/50 text-white rounded-xl text-sm font-semibold transition-all duration-300 shadow-xl"
       >
-        <span class="relative z-10">ورود به محیط تست</span>
+        <span class="relative z-10">vorod</span>
         <div class="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity"></div>
       </button>
 
