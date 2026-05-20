@@ -1,31 +1,23 @@
-<script setup>
-import { useToastStore } from '~/stores/toast'
-const toastStore = useToastStore()
-</script>
-
 <template>
-  <div class="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center gap-8 p-4">
-    <h1 class="text-3xl font-bold tracking-wider">toast notification</h1>
+  <div class="min-h-screen bg-gray-950 p-6">
     
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl w-full">
-     <button 
-  v-for="(btn, index) in toastStore.toastButtons" 
-  :key="index"
-  @click="toastStore.addToast(btn.message, btn.type, btn.position)" 
-  :class="[
-    'p-4 bg-slate-800/80 border-2 rounded-xl shadow-lg font-medium transition-all transform hover:scale-105 text-center',
-    {
-      'border-green-500 text-green-400 hover:bg-green-500/10': btn.type === 'success',
-      'border-red-500 text-red-400 hover:bg-red-500/10': btn.type === 'error',
-      'border-yellow-500 text-yellow-400 hover:bg-yellow-500/10': btn.type === 'warning',
-      'border-blue-500 text-blue-400 hover:bg-blue-500/10': btn.type === 'info'
-    }
-  ]"
->
-  {{ btn.label }}
-</button>
-    </div>
+    <ToastContainer v-slot="{ toasts, remove }">
+      <div 
+        v-for="toast in toasts" 
+        :key="toast.id" 
+        :class="['p-4 rounded-lg shadow-2xl flex justify-between items-center pointer-events-auto transition-all', toast.styleClass]"
+      >
+        <span>{{ toast.message }}</span>
+        <button @click="remove(toast.id)" class="ml-4 font-bold opacity-75 hover:opacity-100">✕</button>
+      </div>
+    </ToastContainer>
 
-    <ToastContainer />
+    <Welcome />
+    
   </div>
 </template>
+
+<script setup>
+import ToastContainer from '~/components/ToastContainer.vue'
+import Welcome from '~/components/Welcome.vue'
+</script>
