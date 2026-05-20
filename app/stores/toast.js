@@ -37,7 +37,7 @@ export const useToastStore = defineStore('toast', {
   }),
 
   actions: {
-    addToast(message, type, position = 'button-left') {
+    addToast(message, type, position = 'botttom-left') {
       const id = Date.now()
       this.toasts.push({ id, message, type, position })
 
